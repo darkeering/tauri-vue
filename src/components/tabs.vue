@@ -63,21 +63,21 @@ function fn() {
   const parentNodeInfo = tabs.value.parentNode.getBoundingClientRect()
   const lastInfo = tabs.value.childNodes[tabs.value.childNodes.length - 1].getBoundingClientRect()
   if (lastInfo.right > parentNodeInfo.right) {
-    const count = Math.floor((lastInfo.right - parentNodeInfo.width) / 210)
+    const count = Math.ceil((lastInfo.right - parentNodeInfo.width) / 210)
     for (let i = 0; i < count; i++) {
       if (showTabs.value.length > 1) {
         moreTabs.value.unshift(showTabs.value.pop())
       }
     }
-  }
-  if (lastInfo.right + 210 < parentNodeInfo.right) {
-    const count = Math.ceil((parentNodeInfo.width - lastInfo.right) / 210)
-    for (let i = 0; i < count; i++) {
-      if (moreTabs.value.length > 0) {
-        showTabs.value.push(moreTabs.value.shift())
+  } else
+    if (lastInfo.right + 210 < parentNodeInfo.right) {
+      const count = Math.ceil((parentNodeInfo.width - lastInfo.right) / 210)
+      for (let i = 0; i < count; i++) {
+        if (moreTabs.value.length > 0) {
+          showTabs.value.push(moreTabs.value.shift())
+        }
       }
     }
-  }
 
   if (show.value) {
     const info = toogleButton.value.getBoundingClientRect()
@@ -117,12 +117,8 @@ onUnmounted(() => {
   </ul>
 
   <Teleport to="body">
-    <ul
-      v-if="show"
-      ref="dropDown"
-      class="drop-down"
-      :style="{ top: pos.y ? pos.y + 'px' : 'unset', left: pos.x ? pos.x + 'px' : 'unset' }"
-    >
+    <ul v-if="show" ref="dropDown" class="drop-down"
+      :style="{ top: pos.y ? pos.y + 'px' : 'unset', left: pos.x ? pos.x + 'px' : 'unset' }">
       <li v-for="tab in moreTabs" :key="tab.id" class="drop-down-item">Steam {{ tab.id }}</li>
     </ul>
   </Teleport>
@@ -139,33 +135,41 @@ onUnmounted(() => {
   cursor: pointer;
   margin-right: 10px;
   flex-shrink: 0;
+
   &:hover {
     background-color: #343c3f;
   }
+
   .icon {
     width: 20px;
   }
+
   .label {
     color: #fff;
     margin-left: 6px;
   }
+
   .delete {
     width: 20px;
     margin-left: auto;
   }
 }
+
 .add {
   margin-right: 10px;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
+
   img {
     width: 20px;
   }
+
   &:hover {
     background-color: #343c3f;
   }
 }
+
 .drop-down {
   margin-top: 8px;
   position: fixed;
@@ -186,5 +190,4 @@ onUnmounted(() => {
       background-color: #404b53;
     }
   }
-}
-</style>
+}</style>

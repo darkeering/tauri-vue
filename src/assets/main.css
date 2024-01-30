@@ -65,3 +65,9 @@ button {
 .align-center {
   align-items: center;
 }
+
+@keyframes ro {
+  0% {transform: rotate(0);}
+  50% {transform: rotate(90deg);}
+  100% {transform: rotate(0);}
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import Alert from '../components/alert.vue'
 import Card from '../components/card.vue'
 import { getAssetsFile } from '../util'
@@ -151,6 +151,12 @@ function fn() {
   items.value.forEach((item: any, index: number) => {
     const x = Math.floor(index / num)
     const y = index % num
+    if(`${y * baseWidth}px` !== item.style.left || item.style.top !== `${x * baseHeight}px`) {
+      item.style.transform = "rotate(30deg)"
+      setTimeout(() => {
+        item.style.transform = "unset"
+      }, 500);
+    }
     item.style.left = `${y * baseWidth}px`
     item.style.top = `${x * baseHeight}px`
   })
@@ -378,7 +384,7 @@ ul {
 
   li {
     position: absolute;
-    transition: all 0.3s;
+    transition: all 0.5s ease;
     will-change: transform;
     display: inline-flex;
     flex-direction: column;
@@ -398,4 +404,6 @@ ul {
   li:hover {
     background-color: #353b3f;
   }
-}</style>
+}
+
+</style>
