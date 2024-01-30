@@ -11,9 +11,16 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.2",
-    "vue": "^3.3.4"
+    "pinia": "^2.1.7",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/tsconfig": "^0.5.0",
     "@tauri-apps/cli": "^1.5.8",
     "@types/node": "^20.11.10",
     "@vitejs/plugin-vue": "^4.2.3",

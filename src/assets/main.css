@@ -1,0 +1,67 @@
+@import './base.css';
+
+#app {
+  margin: 0 auto;
+  padding: 10px 4px;
+  height: 100%;
+  font-weight: normal;
+  display: flex;
+  justify-content: space-between;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: #50e6ff;
+  transition: 0.4s;
+  padding: 3px 0;
+}
+
+
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  color: #fff;
+  background-color: #0078d4;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  border-style: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+::-webkit-scrollbar{
+	height: 9px;
+	width: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	border-style: dashed;
+	border-color: transparent;
+	border-width: 2px;
+	background-color: rgba(157, 165, 183, 0.4);
+	background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-clip: border-box;
+} 
+
+.flex {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.align-center {
+  align-items: center;
+}
