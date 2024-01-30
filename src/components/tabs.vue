@@ -63,17 +63,22 @@ function fn() {
   const parentNodeInfo = tabs.value.parentNode.getBoundingClientRect()
   const lastInfo = tabs.value.childNodes[tabs.value.childNodes.length - 1].getBoundingClientRect()
   if (lastInfo.right > parentNodeInfo.right) {
-    const count = Math.ceil((lastInfo.right - parentNodeInfo.width) / 210)
+    const count = Math.floor((lastInfo.right - parentNodeInfo.width) / 210)
     for (let i = 0; i < count; i++) {
       if (showTabs.value.length > 1) {
         moreTabs.value.unshift(showTabs.value.pop())
       }
     }
   }
-
-  if (lastInfo.right + 210 < parentNodeInfo.right && moreTabs.value.length > 0) {
-    showTabs.value.push(moreTabs.value.shift())
+  if (lastInfo.right + 210 < parentNodeInfo.right) {
+    const count = Math.ceil((parentNodeInfo.width - lastInfo.right) / 210)
+    for (let i = 0; i < count; i++) {
+      if (moreTabs.value.length > 0) {
+        showTabs.value.push(moreTabs.value.shift())
+      }
+    }
   }
+
   if (show.value) {
     const info = toogleButton.value.getBoundingClientRect()
     const _info = dropDown.value.getBoundingClientRect()

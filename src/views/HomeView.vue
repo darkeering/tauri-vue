@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import Alert from '../components/alert.vue'
 import Card from '../components/card.vue'
 import { getAssetsFile } from '../util'
@@ -135,88 +135,29 @@ function previous() {
   }
   index.value--
 }
+const container: any = ref(null)
+const items: any = ref([])
 
 onMounted(() => {
-  let container = document.querySelector('.aaa')!
-  let items = document.querySelectorAll('.bbb')
-  let baseWidth = items[0].clientWidth + 20
-  let nodeLayout: { y: number; x: number }[][] = []
-  //一行可以放多少个
-  let column = Math.floor(container.clientWidth / baseWidth)
-  reset()
-  function reset() {
-    nodeLayout = []
-    let row = Math.ceil(items.length / column)
-    for (let i = 0; i < row; i++) {
-      nodeLayout.push([])
-    }
-    items.forEach((node: any, index) => {
-      //y轴坐标
-      const y = Math.floor(index / column)
-      //x轴坐标
-      const x = index % column
-      //生成视图对应的实例容器
-      node.x = x
-      node.y = y
-      node.isNode = true
-      nodeLayout[y].push(node)
-    })
-    //填充对象 方便后面变换顺序
-    for (let i = 0; i < column; i++) {
-      if (!nodeLayout[row - 1][i]) {
-        nodeLayout[row - 1][i] = { y: row - 1, x: i }
-      }
-    }
-    //设置top left
-    changStyle(nodeLayout)
-  }
-  function changStyle(Layout: any[]) {
-    Layout.forEach((arr: any[]) => {
-      arr.forEach(
-        (node: { isNode: any; y: number; x: number; style: { top: string; left: string } }) => {
-          if (node.isNode) {
-            if (node.y > 0) {
-              resetTop(getNode(node.x, node.y - 1), node)
-            } else {
-              node.style.top = `${20}px`
-            }
-            node.style.left = `${node.x * baseWidth + 20}px`
-          }
-        }
-      )
-    })
-  }
-  function getNode(x: string | number, y: number) {
-    if (!nodeLayout[y]) {
-      return '不存在该节点'
-    }
-    // @ts-ignore
-    if (!nodeLayout[y][x]) {
-      return '不存在该节点'
-    }
-    // @ts-ignore
-    return nodeLayout[y][x]
-  }
-  function resetTop(
-    preNode: { style: { top: any }; clientHeight: number },
-    node: { style: { top: string } }
-  ) {
-    let str = preNode.style.top
-    let preTop = str.slice(0, str.length - 2) * 1
-    node.style.top = `${preTop + preNode.clientHeight + 20}px`
-  }
-  function resetLeft(preNode: { style: { left: any } }, node: { style: { left: string } }) {
-    let str = preNode.style.left
-    let preLeft = str.slice(0, str.length - 2) * 1
-    node.style.left = `${preLeft}px`
-  }
-  window.onresize = function () {
-    const newColumn = Math.floor(container.clientWidth / baseWidth)
-    if (newColumn !== column) {
-      column = newColumn
-      requestAnimationFrame(reset)
-    }
-  }
+  setTimeout(() => {
+    fn()
+  })
+})
+function fn() {
+  const totalWidth = container.value.clientWidth
+  const baseWidth = items.value[0].clientWidth + 20
+  const baseHeight = items.value[0].clientHeight + 20
+  const num = Math.floor(totalWidth / baseWidth)
+  items.value.forEach((item: any, index: number) => {
+    const x = Math.floor(index / num)
+    const y = index % num
+    item.style.left = `${y * baseWidth}px`
+    item.style.top = `${x * baseHeight}px`
+  })
+}
+window.addEventListener('resize', fn)
+onUnmounted(() => {
+  window.removeEventListener('resize', fn)
 })
 </script>
 
@@ -263,8 +204,8 @@ onMounted(() => {
         <h1>已安装功能</h1>
       </div>
       <div>
-        <ul class="aaa">
-          <li class="bbb" v-for="menu in menus" :key="menu.title">
+        <ul ref="container">
+          <li ref="items" v-for="menu in menus" :key="menu.title">
             <img :src="getAssetsFile(menu.src)" alt="" />
             <span> {{ menu.title }} </span>
           </li>
@@ -444,13 +385,10 @@ ul {
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    margin-right: 12px;
-    margin-bottom: 12px;
     cursor: pointer;
     color: #fff;
     padding: 20px;
     background-color: #303538;
-    transition: all 0.3s;
 
     img {
       width: 75px;
