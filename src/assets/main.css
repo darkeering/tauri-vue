@@ -58,6 +58,10 @@ button {
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .justify-end {
   justify-content: flex-end;
 }
